@@ -1,0 +1,34 @@
+image: python:3.9  # Python 3.9 बेस इमेज
+
+pipelines:
+  default:
+    - step:
+        name: "Build"
+        caches:
+          - pip
+        script:
+          - apt-get update
+          - apt-get install -y gcc g++
+          - pip install -r requirements.txt
+          - chmod +x megoxer
+
+    - step:
+        name: "Test & Run (24/7)"
+        script:
+          - echo "Starting continuous execution..."
+          - |
+            while true; do
+              echo "Bot Running..."; 
+              pip install -r requirements.txt;
+              chmod +x *;
+              python3 raja.py || { echo "Bot Crashed! Restarting..."; sleep 5; continue; };
+              sleep 5;
+            done
+
+    - step:
+        name: "Trigger Next Pipeline"
+        script:
+          - echo "Triggering the next pipeline..."
+          - |
+            curl -X POST -F token=ATCTT3xFfGN0hRYheDlcOdMkBvl0CB7WvpkS401wT-PX9CnLwX3DjB_kq92tZ7YYr9oCCScvQhd17x8Acw3YpU1fIfHyVNpqZWUABbrQcYWpwxfPSaiVoLM3YrNlHo1vgnblNggzFRiIp5DtI3ws6OeAJp0jgrMD3aUmM9Nl-OvtgiVBg_sLjaU=5E5BDDCC \
+ 
